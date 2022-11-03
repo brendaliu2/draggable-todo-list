@@ -1,10 +1,10 @@
 import './App.css';
-import JobBoard from './JobBoard';
+import DraggableTodoApp from './DraggableTodoApp';
 
 function App() {
   return (
     <div className="App">
-      <JobBoard />
+      <DraggableTodoApp />
     </div >
   );
 }
