@@ -3,6 +3,7 @@ import initialData from './dummyData';
 import Column from './Column';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import NewTodoForm from './NewTodoForm';
 
 const Container = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ const Container = styled.div`
 
 export default function DraggableTodoApp() {
   const [data, setData] = useState(initialData);
+  const taskIds = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   // function startDrag() {
   //   document.body.style.color = 'orange';
@@ -20,6 +22,9 @@ export default function DraggableTodoApp() {
     // document.body.style.color = 'inherit';
     // document.body.style.backgroundColor = 'inherit';
     const { destination, source, draggableId } = result;
+    console.log('destination', destination);
+    console.log('source', source);
+    console.log('draggableID', draggableId);
 
     if (!destination) {
       return;
@@ -52,37 +57,40 @@ export default function DraggableTodoApp() {
           [newCol.id]: newCol,
         }
       };
+      console.log('new data', newData);
+      //API call to update reorder
+      setData(newData);
+    } else {
+
+
+
+      //moving to diff col
+      const startTaskIds = Array.from(startCol.taskIds);
+      startTaskIds.splice(source.index, 1);
+      const newStart = {
+        ...startCol,
+        taskIds: startTaskIds,
+      };
+
+      const finishTaskIds = Array.from(endCol.taskIds);
+      finishTaskIds.splice(destination.index, 0, draggableId);
+      const newFinish = {
+        ...endCol,
+        taskIds: finishTaskIds,
+      };
+
+      const newData = {
+        ...data,
+        columns: {
+          ...data.columns,
+          [newStart.id]: newStart,
+          [newFinish.id]: newFinish,
+        }
+      };
+
       //API call to update reorder
       setData(newData);
     }
-
-    //moving to diff col
-    const startTaskIds = Array.from(startCol.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...startCol,
-      taskIds: startTaskIds,
-    };
-
-    const finishTaskIds = Array.from(endCol.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...endCol,
-      taskIds: finishTaskIds,
-    }
-
-    const newData = {
-      ...data,
-      columns: {
-        ...data.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      }
-    }
-
-    //API call to update reorder
-    setData(newData);
-
   }
 
   // function updateDrag(update) {
@@ -93,8 +101,37 @@ export default function DraggableTodoApp() {
   //   document.body.style.backgroundColor = `rgba(153, 141, 217, ${opacity})`;
   // }
 
+  function create(newTodo) {
+    const tasks = [...data.tasks];
+    const latestId = tasks.at(-1).id;
+    const newId = taskIds[taskIds.indexOf(latestId) + 1];
+
+    tasks.push({
+      id: newId,
+      content: newTodo.content,
+    })
+
+    const colTasks = [...data.columns['column-1'].taskIds];
+    colTasks.push(newId);
+
+    const newData = {
+      ...data,
+      tasks: tasks,
+      columns: {
+        ...data.columns,
+        'column-1': {
+          ...data.columns['column-1'],
+          taskIds: colTasks,
+        }
+      }
+    }
+
+    setData(newData);
+  }
+
 
   return (
+    <>
     <DragDropContext
       // onDragStart={startDrag}
       onDragEnd={endDrop}
@@ -113,12 +150,17 @@ export default function DraggableTodoApp() {
       <Container>
         {data.columnOrder.map(columnId => {
           const col = data.columns[columnId];
-          const tasks = col.taskIds.map(taskId => data.tasks[taskId]);
+          const tasks = col.taskIds.map(taskId => {
+            const task = data.tasks.filter(task => task.id === taskId);
+            return task[0];
+          });
 
           return <Column key={col.id} col={col} tasks={tasks} />;
         })}
       </Container>
       {/* </main> */}
     </DragDropContext>
+    <NewTodoForm handleSave={create} />
+    </>
   );
 }

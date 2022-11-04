@@ -1,10 +1,10 @@
 const initialData = {
-  tasks: {
-    'A': {id: 'A', content: 'apply to jobs'},
-    'B': {id: 'B', content: 'network'},
-    'C': {id: 'C', content: 'go running'},
-    'D': {id: 'D', content: 'watch kung fu panda again'},
-  },
+  tasks: [
+    {id: 'A', content: 'apply to jobs'},
+    {id: 'B', content: 'network'},
+    {id: 'C', content: 'go running'},
+    {id: 'D', content: 'watch kung fu panda again'},
+  ],
   columns: {
     'column-1': {
       id: 'column-1',
