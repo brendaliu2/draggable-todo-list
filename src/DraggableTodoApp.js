@@ -107,7 +107,7 @@ export default function DraggableTodoApp() {
 
   function createTask(newTodo) {
     const tasks = [...data.tasks];
-    const latestId = tasks.at(-1).id;
+    const latestId = tasks.length ? tasks.at(-1).id : "A";
     const newId = taskIds[taskIds.indexOf(latestId) + 1];
 
     tasks.push({
