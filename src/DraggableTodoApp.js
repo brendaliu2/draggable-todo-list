@@ -7,6 +7,14 @@ import NewTodoForm from './NewTodoForm';
 
 const Container = styled.div`
   display: flex;
+  font-family: 'Montserrat', sans-serif;
+  justify-content: center;
+  margin-bottom: 2rem;
+`;
+
+const Header = styled.header`
+  font-family: 'Montserrat', sans-serif;
+  margin: 2rem;
 `;
 
 export default function DraggableTodoApp() {
@@ -22,9 +30,6 @@ export default function DraggableTodoApp() {
     // document.body.style.color = 'inherit';
     // document.body.style.backgroundColor = 'inherit';
     const { destination, source, draggableId } = result;
-    console.log('destination', destination);
-    console.log('source', source);
-    console.log('draggableID', draggableId);
 
     if (!destination) {
       return;
@@ -57,7 +62,6 @@ export default function DraggableTodoApp() {
           [newCol.id]: newCol,
         }
       };
-      console.log('new data', newData);
       //API call to update reorder
       setData(newData);
     } else {
@@ -101,7 +105,7 @@ export default function DraggableTodoApp() {
   //   document.body.style.backgroundColor = `rgba(153, 141, 217, ${opacity})`;
   // }
 
-  function create(newTodo) {
+  function createTask(newTodo) {
     const tasks = [...data.tasks];
     const latestId = tasks.at(-1).id;
     const newId = taskIds[taskIds.indexOf(latestId) + 1];
@@ -109,7 +113,7 @@ export default function DraggableTodoApp() {
     tasks.push({
       id: newId,
       content: newTodo.content,
-    })
+    });
 
     const colTasks = [...data.columns['column-1'].taskIds];
     colTasks.push(newId);
@@ -124,43 +128,37 @@ export default function DraggableTodoApp() {
           taskIds: colTasks,
         }
       }
-    }
+    };
 
     setData(newData);
   }
 
-
   return (
     <>
-    <DragDropContext
-      // onDragStart={startDrag}
-      onDragEnd={endDrop}
-    // onDragUpdate={updateDrag}
-    >
-      {/* <main>
-        <header>
-          <h1>Job Board</h1>
-          <p>Keep track of your job search journey!</p>
-        </header>
+      <Header>
+        <h1>Task Tracker</h1>
+      </Header>
 
-        <section>
-          <h2>Jobs</h2>
-        </section> */}
+      <DragDropContext
+        // onDragStart={startDrag}
+        onDragEnd={endDrop}
+      // onDragUpdate={updateDrag}
+      >
+        <Container>
+          {data.columnOrder.map(columnId => {
+            const col = data.columns[columnId];
+            const tasks = col.taskIds.map(taskId => {
+              const task = data.tasks.filter(task => task.id === taskId);
+              return task[0];
+            });
 
+            return <Column key={col.id} col={col} tasks={tasks} />;
+          })}
+        </Container>
+      </DragDropContext>
       <Container>
-        {data.columnOrder.map(columnId => {
-          const col = data.columns[columnId];
-          const tasks = col.taskIds.map(taskId => {
-            const task = data.tasks.filter(task => task.id === taskId);
-            return task[0];
-          });
-
-          return <Column key={col.id} col={col} tasks={tasks} />;
-        })}
+        <NewTodoForm handleSave={createTask} />
       </Container>
-      {/* </main> */}
-    </DragDropContext>
-    <NewTodoForm handleSave={create} />
     </>
   );
 }

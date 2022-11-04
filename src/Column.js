@@ -17,12 +17,12 @@ const Title = styled.h3`
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease;
-  background-color: ${props => props.isDraggingOver ? 'skyblue' : 'white'};
+  background-color: ${props => props.isDraggingOver ? '#FEFAE0' : 'white'};
   flex-grow: 1;
   min-height: 100px;
 `;
 
-export default function Column({ col, tasks }) {
+export default function Column({ col, tasks, remove }) {
   return (
     <Container>
       <Title>{col.title}</Title>
@@ -33,7 +33,7 @@ export default function Column({ col, tasks }) {
             {...provided.droppableProps}
             isDraggingOver={snapshot.isDraggingOver}
           >
-            {tasks.map((task, index) => <Task key={task.id} task={task} index={index}/>)}
+            {tasks.map((task, index) => <Task key={task.id} task={task} index={index} />)}
             {provided.placeholder}
           </TaskList>
         )}

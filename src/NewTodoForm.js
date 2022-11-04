@@ -35,7 +35,7 @@ export default function NewTodoForm({ initialFormData = {
       <input
         id="newTodo-content"
         name="content"
-        placeholder="content"
+        placeholder="new task"
         onChange={handleChange}
         value={formData.content}
         aria-label="content"

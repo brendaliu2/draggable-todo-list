@@ -6,9 +6,7 @@ const Container = styled.div`
   border-radius: 2px;
   padding: 8px;
   margin-bottom: 8px;
-  background-color: ${props => props.isDragging ? 'lightgreen' : 'white'};
-
-  // display: flex;
+  background-color: ${props => props.isDragging ? '#588157' : 'white'};
 `;
 
 // const Handle = styled.div`
@@ -20,6 +18,7 @@ const Container = styled.div`
 // `;
 
 export default function Task({ task, index }) {
+
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided, snapshot) => (
