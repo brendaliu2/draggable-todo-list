@@ -1,10 +1,10 @@
 import './App.css';
-import DraggableTodoApp from './DraggableTodoApp';
+import TaskTracker from './TaskTracker';
 
 function App() {
   return (
     <div className="App">
-      <DraggableTodoApp />
+      <TaskTracker />
     </div >
   );
 }

@@ -40,7 +40,7 @@ export default function NewTodoForm({ initialFormData = {
         value={formData.content}
         aria-label="content"
       />
-      <button>Add</button>
+      <button className='NewTodoForm-addBtn'>Add</button>
     </form>
   );
 }

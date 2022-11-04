@@ -17,7 +17,7 @@ const Header = styled.header`
   margin: 2rem;
 `;
 
-export default function DraggableTodoApp() {
+export default function TaskTracker() {
   const [data, setData] = useState(initialData);
   const taskIds = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -144,7 +144,7 @@ export default function DraggableTodoApp() {
         onDragEnd={endDrop}
       // onDragUpdate={updateDrag}
       >
-        <Container>
+        <Container className="TaskTracker">
           {data.columnOrder.map(columnId => {
             const col = data.columns[columnId];
             const tasks = col.taskIds.map(taskId => {
